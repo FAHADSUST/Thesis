@@ -45,7 +45,12 @@ public class IsImage {
             NewsAnalysis.imshow("Sub subMat" + i, subMat[i]);
             int horizontal[] = horizontalChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
             int verticle[] = VerticleChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
-            if(horizontal[0] + horizontal[1]> 110 && verticle[0] + verticle[1]>110) return true;
+            if(horizontal[0] + horizontal[1]> 110 && verticle[0] + verticle[1]>110){
+                if(item.getHeight()>100 && item.getWidth()>100){
+                    return true;
+                }
+                
+            }
         
         }
         
