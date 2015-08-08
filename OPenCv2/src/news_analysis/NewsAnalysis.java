@@ -57,7 +57,7 @@ public class NewsAnalysis {
         bw = new BufferedWriter(fw);
         bw.flush();
         // Load an image file and display it in a window.
-        Mat m1 = Highgui.imread("H:\\error1.jpg");
+        Mat m1 = Highgui.imread("H:\\error35.jpg");
         //imshow("Original", m1);
 
         // Do some image processing on the image and display in another window.
