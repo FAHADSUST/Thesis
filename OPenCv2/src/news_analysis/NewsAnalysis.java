@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import news_analysis.headlinedetection.HeadLineDetection;
 import news_analysis.isimage.IsImage;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -57,7 +58,7 @@ public class NewsAnalysis {
         bw = new BufferedWriter(fw);
         bw.flush();
         // Load an image file and display it in a window.
-        Mat m1 = Highgui.imread("H:\\error35.jpg");
+        Mat m1 = Highgui.imread("E:\\Raw Java Project\\Thesis\\test6.jpg");
         //imshow("Original", m1);
 
         // Do some image processing on the image and display in another window.
@@ -150,7 +151,8 @@ public class NewsAnalysis {
             //filewrile(temp);
         }
         imshow("Convertion", convertArea);
-        IsImage image = new IsImage();
+        IsImage isImage = new IsImage();
+        HeadLineDetection isHeadline = new HeadLineDetection();
 
         ImageBorderDetectionBFS imgBFS = new ImageBorderDetectionBFS();
         ArrayList<BorderItem> borderItems = imgBFS.getBorder(balckWhite, width, hight);
@@ -158,10 +160,16 @@ public class NewsAnalysis {
         for (int i = 0; i < borderItems.size(); i++) {
             subMat[i] = m2.submat(borderItems.get(i).getMinX(), borderItems.get(i).getMaxX(),
                     borderItems.get(i).getMinY(), borderItems.get(i).getMaxY());
-            if (image.isImage(subMat[i])) {
+            if (isImage.isImage(subMat[i])) {
                 System.out.println("subMat" + i + " is an image");
-                imshow("subMat" + i, subMat[i]);
-                //System.out.println(borderItems.get(i).toString());
+                //imshow("subMat" + i, subMat[i]);
+                
+            }else if(isHeadline.isHeadLine(subMat[i])){
+                System.out.println("subMat" + i + " is an Headline");
+                //imshow("Headline" + i, subMat[i]);
+            }else{
+                System.out.println("subMat" + i + " is an Column");
+                imshow("Column" + i, subMat[i]);
             }
             //imshow("subMat" + i, subMat[i]);
             bw.close();

@@ -40,16 +40,18 @@ public class IsImage {
         Mat[] subMat = new Mat[borderItems.size()];
         for(int i=0;i<borderItems.size();i++){
             BorderItem item = borderItems.get(i);
-            subMat[i]= image.submat(item.getMinX(), item.getMaxX(), item.getMinY(), item.getMaxY());
-            
-            NewsAnalysis.imshow("Sub subMat" + i, subMat[i]);
-            int horizontal[] = horizontalChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
-            int verticle[] = VerticleChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
-            if(horizontal[0] + horizontal[1]> 110 && verticle[0] + verticle[1]>110){
-                if(item.getHeight()>100 && item.getWidth()>100){
+            if(item.getHeight()>100 && item.getWidth()>100){
+                item = canMaxiMizeBorder(item, item.getMinX(), item.getMaxX(), item.getMinY(), item.getMaxY(), height, width);
+                subMat[i]= image.submat(item.getMinX(), item.getMaxX(), item.getMinY(), item.getMaxY());
+
+                //NewsAnalysis.imshow("Sub sub sub" + i, subMat[i]);
+                int horizontal[] = horizontalChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
+                int verticle[] = VerticleChecked(subMat[i], item.getHeight()-1, item.getWidth()-1);
+                if(horizontal[0] + horizontal[1]> 110 && verticle[0] + verticle[1]>110){
+                    
                     return true;
                 }
-                
+                return true;
             }
         
         }
@@ -59,11 +61,12 @@ public class IsImage {
     }
 
     private int[] horizontalChecked(Mat image,int width, int height) {
-        int CHEACKED_LINE = (width/2) % 5; 
+        int CHEACKED_LINE = (width/2) % 6; 
         int countHisto=0;   
         int maxTAG=-1;
         int start_H_HV=0;
         int End_H_HV=0;
+        
         for(int i=0; i< height;i++){  
             if(i > CHEACKED_LINE && i < height - CHEACKED_LINE) {maxTAG=-1; continue;}
             countHisto=0;
@@ -95,6 +98,7 @@ public class IsImage {
         int maxTAG=-1;
         int start_H_HV=0;
         int End_H_HV=0;
+        
         for(int i=0; i< width;i++){  
             if(i > CHEACKED_LINE && i < width - CHEACKED_LINE) {maxTAG=-1; continue;}
             countHisto=0;
@@ -121,5 +125,33 @@ public class IsImage {
     
     public int compareWithWidth(int base, int haveToFind){
         return (int)((haveToFind * 100.0f) / base);
+    }
+    
+    public BorderItem  canMaxiMizeBorder( BorderItem item, int minX, int maxX, int minY, int maxY, int width, int height) {
+        int minXTemp; int maxXTemp; int minYTemp; int maxYTemp;
+        
+        if(minX >1 && minX < maxX-1) minXTemp = minX-2;
+        else if(minX >0 && minX < maxX) minXTemp = minX-1;
+        else minXTemp = minX;
+        
+        if(maxX < width -2 && maxX > minX-1 ) maxXTemp = maxX+2;
+        else if(maxX < width-1  && maxX > minX ) maxXTemp = maxX+1;
+        else maxXTemp = maxX;
+        
+        if(minY >1 && minY < maxY-1) minYTemp = minY-2;
+        else if(minY >0 && minY < maxY) minYTemp = minY-1;
+        else minYTemp = minY;
+        
+        if(maxY < height -2 && maxY > minY-1 ) maxYTemp = maxY+2;
+        else if(maxY < height-1  && maxY > minY ) maxYTemp = maxY+1;
+        else maxYTemp = maxY;
+        
+        item.setMinX(minXTemp);
+        item.setMaxX(maxXTemp);
+        item.setMinY(minYTemp);
+        item.setMaxY(maxYTemp);
+        
+        return item;
+        
     }
 }

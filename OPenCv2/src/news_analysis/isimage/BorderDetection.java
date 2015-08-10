@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import news_analysis.NewsAnalysis;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -54,6 +55,8 @@ public class BorderDetection {
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 2));      
         Imgproc.morphologyEx(imageOri, image, CV_MOP_CLOSE, element);
         
+       // NewsAnalysis.imshow("Morph", image);
+        
         int result = 0;
         this.width = width;
         this.height = height;
@@ -74,6 +77,7 @@ public class BorderDetection {
                         //canMaxiMizeBorder(minX, maxX, minY, maxY,width, height);
                         BorderItem item = new BorderItem(countAt, minX, maxX, minY, maxY, maxX-minX+1, maxY-minY+1);
                         borderItems.add(item);
+                        
                         
                     }
                 }
@@ -199,22 +203,28 @@ public class BorderDetection {
     }
 
     private void canMaxiMizeBorder(int minX, int maxX, int minY, int maxY, int width, int height) {
-        if(minX >1 && minX < maxX-1) this.minX = minX-2;
-        else if(minX >0 && minX < maxX) this.minX = minX-1;
+        int minXTemp; int maxXTemp; int minYTemp; int maxYTemp;
         
-        if(maxX < width -1 && maxX > minX-1 ) this.maxX = maxX+2;
-        else if(maxX < width  && maxX > minX ) this.maxX = maxX+1;
+        if(minX >1 && minX < maxX-1) minXTemp = minX-2;
+        else if(minX >0 && minX < maxX) minXTemp = minX-1;
+        else minXTemp = minX;
         
+        if(maxX < width -2 && maxX > minX-1 ) maxXTemp = maxX+2;
+        else if(maxX < width-1  && maxX > minX ) maxXTemp = maxX+1;
+        else maxXTemp = maxX;
         
-        if(minY >1 && minY < maxY-1) this.minY = minY-2;
-        else if(minY >0 && minY < maxY) this.minY = minY-1;
+        if(minY >1 && minY < maxY-1) minYTemp = minY-2;
+        else if(minY >0 && minY < maxY) minYTemp = minY-1;
+        else minYTemp = minY;
         
-        if(maxY < height -1 && maxY > minY-1 ) this.maxY = maxY+2;
-        else if(maxY < height  && maxY > minY ) this.maxY = maxY+1;
+        if(maxY < height -2 && maxY > minY-1 ) maxYTemp = maxY+2;
+        else if(maxY < height-1  && maxY > minY ) maxYTemp = maxY+1;
+        else maxYTemp = maxY;
         
-        BorderItem item = new BorderItem(countAt, this.minX, this.maxX, this.minY,this. maxY, 
-                this.maxX-this.minX+1, this.maxY-this.minY+1);
+        BorderItem item = new BorderItem(countAt, minXTemp, maxXTemp, minYTemp, maxYTemp, 
+                maxXTemp-minXTemp+1, maxYTemp-minYTemp+1);
         borderItems.add(item);
     }
+    
     
 }
